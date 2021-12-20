@@ -22,36 +22,43 @@ import './taskItem.scss';
     onFocus(e) {
         e.currentTarget.classList.add("to-do__text-active");
     }
-    onBlur(e) {
+    onBlur = (e) => {
+        const thisValue = this.props.title; 
+        console.log(thisValue);
         e.currentTarget.classList.remove("to-do__text-active");
+        if(this.state.title.length === 0){
+            this.setState({ 
+                title: thisValue      
+            })
+        }
     }
 
-    onSubmit = (e) => {
-        e.preventDefault();
-        this.props.onAdd(
-            this.state.title,
-        );
-        this.setState({
-            title: '',
-        })
-    } 
-
     handleKeyDown = (e) => {
+        const thisValue = this.props.title;
+        console.log(thisValue+ ` this.state.title-1`);
+
         if(e.keyCode === 13){
             e.preventDefault();
-            // e.setAttribute
+            e.currentTarget.setAttribute("readonly", "true")
             e.currentTarget.classList.remove("to-do__text-active");
             this.props.updateData(
                 this.state.id,
                 this.state.title,
             );
-        }
+        }     
     }
+
       
+    removeAttribute = (e) => {
+        console.log(this.state.id)
+        e.currentTarget.classList.add("to-do__text-active");
+        e.currentTarget.removeAttribute("readonly", "true")
+    }
 
     render() {
         const {title} = this.state;
         const {done, onDelete, doneTasks, index} = this.props;
+
  
 
         let classDone = "to-do__text" 
@@ -70,29 +77,27 @@ import './taskItem.scss';
 
         return (
             <li className="to-do__list-li">
-                    <label className={classCheck} htmlFor="checkItem"></label>
-                        <input id="checkItem"
-                            className="to-do__checkbox-input" 
-                            onClick={doneTasks} 
-                            type="checkbox"
-                        />
-                        <img className={classActive} src="/img/check.svg" alt="check" />
-                        <input 
-                            className={classDone}
-                            onChange={this.inputChange}
-                            onKeyDown={this.handleKeyDown}
-                            onFocus={this.onFocus}
-                            onBlur={this.onBlur}
-                            // readOnly value={this.value}
-                            // onSubmit={this.onSubmit}
-                            value={title}
-                            id={index} 
-                            type="text" 
-                            
-                        />    
-                    <button className="to-do__checkbox-btn" onClick={onDelete}>
-                        <img className="to-do__checkbox-cross" src="/img/cross.svg" alt="delete"/>
-                    </button>       
+                <label className={classCheck} htmlFor="checkItem"></label>
+                    <input id="checkItem"
+                        className="to-do__checkbox-input" 
+                        onClick={doneTasks} 
+                        type="checkbox"
+                    />
+                    <img className={classActive} src="/img/check.svg" alt="check" />
+                    <input            
+                        className={classDone}
+                        type="text" 
+                        onClick={this.removeAttribute}
+                        onChange={this.inputChange}
+                        onKeyDown={this.handleKeyDown}
+                        onFocus={this.onFocus}
+                        onBlur={this.onBlur}
+                        value={title}
+                        id={index} 
+                    />    
+                <button className="to-do__checkbox-btn" onClick={onDelete}>
+                    <img className="to-do__checkbox-cross" src="/img/cross.svg" alt="delete"/>
+                </button>
             </li>           
         );
     }    

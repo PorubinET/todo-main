@@ -1,7 +1,4 @@
 import React, { Component } from "react";
-
-
-// import TaskItem from "../taskItem/taskItem";
 import './taskinput.scss'
 
 class TaskInput extends Component {
@@ -11,15 +8,21 @@ class TaskInput extends Component {
             title: '',
         }
     }
+    
 
     onSubmit = (e) => {
-        e.preventDefault();
-        this.props.onAdd(
-            this.state.title,
-        );
-        this.setState({
-            title: '',
-        })
+        if(this.state.title.trim()) {
+            e.preventDefault();
+            this.props.onAdd(
+                this.state.title.replace (/ +/g, ' '),
+            );
+            this.setState({
+                title: '',
+            })
+        } 
+        else{
+            e.preventDefault();
+        }
     }  
 
     inputChange = e => {
@@ -52,14 +55,13 @@ class TaskInput extends Component {
                     type="checkbox">
                 </input>
                 <img className={classArrow} src="/img/arrow.svg" alt="arrow" />
-                <form className="to-do__form-add" onSubmit={this.onSubmit}>                
+                <form className="add" onSubmit={this.onSubmit}>                
                     <input className="to-do__task"
-                        type="text" 
                         value={title} 
+                        type="text" 
                         onChange={this.inputChange} 
                         placeholder="What needs to be done?">                   
                     </input>
-                    {/* <TaskItem/> */}
                 </form>
             </div>
             
