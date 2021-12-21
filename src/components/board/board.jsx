@@ -3,20 +3,19 @@ import './board.scss'
 
 
 const Board = (props) => {
-    const {activeTask, allDelete, countTask, doneTask} = props;
+    const {allDelete, data, countTask} = props;
     const buttonsData = [
         {name: 'all', label: 'All'},
         {name: 'active', label: 'Active'},
         {name: 'compleated', label: 'Completed'}
-    ];
+        ];
 
         const buttons = buttonsData.map(({name, label}) => {
         const active = props.filter === name;
-        const clazz = active ? "to-do__btn-active" : "to-do__board-btn"
 
         return (
             <button 
-                className={`to-do__board-btn ${clazz}`}
+                className={active ? "to-do__btn-active" : "to-do__board-btn"}
                 type="button"
                 onClick={() => props.onFilterSelect(name)}
                 key={name}>
@@ -24,23 +23,22 @@ const Board = (props) => {
             </button>
         )
     })
-    let classClear = "to-do__board-btn-clear"
-    if (doneTask > 0){
-        classClear += " to-do__board-btn-active"
-    }
 
-    if  (countTask > 0) {
+    if  (countTask > 0) { 
         return (
             <div className="to-do__board">
-                <p className="to-do__board-list-items">{activeTask} item left</p>
+                <p className="to-do__board-list-items">{data.filter(item => !item.done).length} item left</p>
                 <ul className="to-do__board-check">
-                    <li>
+                    <li className="to-do__board-li">
                         {buttons}
                     </li>
                 </ul>
                 <div className="to-do__board-list-btn">
-                    <button className={classClear}  
-                        onClick={allDelete}>
+                    <button className={data.filter(item => item.done).length ? 
+                        "to-do__board-btn-clear to-do__board-btn-active" : 
+                        "to-do__board-btn-clear"}  
+                        onClick={allDelete}
+                    >
                         Clear completed
                     </button>
                 </div>

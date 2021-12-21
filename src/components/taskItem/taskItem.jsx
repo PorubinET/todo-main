@@ -15,7 +15,7 @@ import './taskItem.scss';
 
     inputChange = e => {
         this.setState({ 
-            title: e.target.value      
+            title: e.target.value.replace (/ +/g, ' ')      
         })
     }
 
@@ -24,7 +24,7 @@ import './taskItem.scss';
     }
     onBlur = (e) => {
         const thisValue = this.props.title; 
-        console.log(thisValue);
+        // console.log(thisValue);
         e.currentTarget.classList.remove("to-do__text-active");
         if(this.state.title.length === 0){
             this.setState({ 
@@ -34,8 +34,8 @@ import './taskItem.scss';
     }
 
     handleKeyDown = (e) => {
-        const thisValue = this.props.title;
-        console.log(thisValue+ ` this.state.title-1`);
+        // const thisValue = this.props.title;
+        // console.log(thisValue+ ` this.state.title-1`);
 
         if(e.keyCode === 13){
             e.preventDefault();
@@ -50,7 +50,6 @@ import './taskItem.scss';
 
       
     removeAttribute = (e) => {
-        console.log(this.state.id)
         e.currentTarget.classList.add("to-do__text-active");
         e.currentTarget.removeAttribute("readonly", "true")
     }

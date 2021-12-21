@@ -14,17 +14,21 @@
         position: relative;
         box-shadow: 0px 6px 4px -4px #b9b9b9, 0px 14px 0px -6px #f5f5f5, 0px 18px 4px -9px #a4a4a4, 0px 24px 0px -10px #f0f0f0;
     }
+    &__board-li{
+        min-width: 200px;
+        display: flex;
+        justify-content: space-between;
+    }
     &__board-btn {
-        padding: 2px 8px;
-        margin-left: 20px; 
         border-radius: 2px;
         border: 1px solid transparent; 
-        transition: all .5;
+        transition: all .5s;
         &:hover{
             border: 1px solid rgba(97, 17, 17, 0.5); 
         }
     }
     &__btn-active {
+        border-radius: 2px;
         border: 1px solid rgba(97, 17, 17, 0.5); 
     }
     &__board-btn-clear{

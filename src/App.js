@@ -10,29 +10,22 @@ class App extends Component{
     super(props);
     this.state = {
       data: [
-        // {id:"1", title: "Задача", done: false},
-        // {id:"2", title: "Todo", done: false},
-        // {id:"3", title: "Сделать", done: false},
-        // {id:"4", title: "Срочно", done: false},
+        {id:"1", title: "a", done: false},
+        {id:"2", title: "b", done: false},
+        {id:"3", title: "c", done: false},
+        {id:"4", title: "d", done: false},
       ],
       filter: 'all'
     }
     this.maxId = this.state.data.length +1;  
   }
   
-
   deleteItem = (id) => {
-    this.setState(({data}) => {
-      return {
-        data: data.filter(item => item.id !== id),
-      }
-    })
+    this.setState({data: this.state.data.filter(item => item.id !== id)})
   }
 
   deleteAll = () => {
-    this.setState(() => {
-        return {data: this.state.data.filter(item => item.done === false)}  
-    })
+    this.setState({data: this.state.data.filter(item => !item.done)})
   }
 
   addTask = (title) => {
@@ -51,92 +44,130 @@ class App extends Component{
   }
 
   
+  // updateData = (id, value) => {
+  //   const newList = this.state.data.map(task => {
+  //     if (id === task.id) {
+  //       return {...task, title: value}
+  //     } else {
+  //       return task
+  //     }
+  //   })
+  //   this.setState({ data: newList })
+  // }
+
+
   updateData = (id, value) => {
     const newList = this.state.data.map(task => {
-      if (id === task.id) {
+      if (id === task.id) 
         return {...task, title: value}
-      } else {
+      else 
         return task
-      }
     })
     this.setState({ data: newList })
   }
 
+  // allCompleated = () => {
+  //   this.setState(({data}) => ({
+  //     data: data.map(item => {
+  //       if (this.state.data.every(item => item.done === true))
+  //         return {...item, done: !item.done}
+  //       else
+  //         return {...item, done: true}
+  //     })
+  //   }))
+  // }
+
   allCompleated = () => {
-    const doneCount = this.state.data.filter(item => item.done === false).length
     this.setState(({data}) => ({
       data: data.map(item => {
-        if (doneCount === 0)
-          return {...item, done: !item.done}
+        if(this.state.data.every(item => item.done)) 
+          return  {...item, done: !item.done}
         else
-          return {...item, done: item.done = true}
+          return {...item, done: true}
       })
     }))
   }
   
 
+  // doneTasks = (id) => {
+  //   this.setState(({data}) => ({
+  //     data: data.map(item => {
+  //       if (item.id === id) {
+  //         return {...item, done: !item.done}
+  //       }
+  //       return item;
+  //     })
+  //   }))
+  // }
+
   doneTasks = (id) => {
     this.setState(({data}) => ({
       data: data.map(item => {
-        if (item.id === id) {
+        if (item.id === id) 
           return {...item, done: !item.done}
-        }
         return item;
       })
     }))
   }
+
+  // filterPost = (items, filter) => {
+  //   switch (filter) {
+  //     case "compleated":
+  //       return items.filter(items => items.done);
+  //     case "active":
+  //       return items.filter(items => !items.done);
+  //     default:
+  //       return items;
+  //   }
+  // }
 
   filterPost = (items, filter) => {
     switch (filter) {
       case "compleated":
         return items.filter(items => items.done);
       case "active":
-        return items.filter(items => items.done === false);
+        return items.filter(items => !items.done);
       default:
         return items;
     }
   }
 
-  onFilterSelect = (filter) => {
-    this.setState({filter});
-  }
-
-  
+  onFilterSelect = (filter) => { this.setState({filter}) }
 
   render(){
     const {data, filter} = this.state;
-    const activeTask = this.state.data.filter(item => item.done === false).length
-    const doneTask = this.state.data.filter(item => item.done === true).length
-    const countTask = this.state.data.filter(item => item).length
     const visibleData = this.filterPost((data), filter);
-    const dataValue = this.state.data;
+    const countTask = data.length
+    // const activeTask = this.state.data.filter(item => item.done === false).length
+    // const doneTask = this.state.data.filter(item => item.done === true).length
+    // console.log((this.state.data.done === true));
+    // const dataValue = data;
 
     return (
       <div className="App">   
           <div className="wrapper">
             <div className="to-do">
-              <h1 className="to-do__title">todos</h1>
-              
+              <h1 className="to-do__title">todos</h1>     
               <div className="to-do__block">
                 <TaskInput 
-                countTask={countTask}
-                activeTask={activeTask}
+                data={visibleData}
+                // activeTask={activeTask}
                 onAdd={this.addTask}
                 allCompleated={this.allCompleated}
                 />
                 <TaskList 
                 data={visibleData}
-                dataValue={dataValue}
                 doneTasks={this.doneTasks}
                 onDelete={this.deleteItem}
                 updateData={this.updateData}
                 allCompleated={this.allCompleated}
                 />
                 <Board 
+                data={visibleData}
                 filter={filter}
+                // activeTask={activeTask}
+                // doneTask={doneTask}
                 countTask={countTask}
-                activeTask={activeTask}
-                doneTask={doneTask}
                 allDelete={this.deleteAll}
                 onFilterSelect={this.onFilterSelect}              
                 />  

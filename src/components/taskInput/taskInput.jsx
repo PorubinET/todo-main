@@ -9,16 +9,13 @@ class TaskInput extends Component {
         }
     }
     
+    // .trim()
 
     onSubmit = (e) => {
-        if(this.state.title.trim()) {
+        if(this.state.title) {
             e.preventDefault();
-            this.props.onAdd(
-                this.state.title.replace (/ +/g, ' '),
-            );
-            this.setState({
-                title: '',
-            })
+            this.props.onAdd(this.state.title.replace (/ +/g, ' '));
+            this.setState({title: ''})
         } 
         else{
             e.preventDefault();
@@ -26,45 +23,44 @@ class TaskInput extends Component {
     }  
 
     inputChange = e => {
-        this.setState({ 
-            title: e.target.value
-        })
+        this.setState({title: e.target.value}) 
     }
     
 
     render() {
         const {title} = this.state;
-        const {allCompleated, countTask, activeTask} = this.props;
+        const {allCompleated, data} = this.props;
 
-        let classCheck = "to-do__list-btn"
-        let classArrow = "to-do__list-btn-arrow";
+        let classArrow = data.length ? "to-do__list-btn-arrow to-do__list-btn-arrow-active" : " to-do__list-btn-arrow";
+        let classCheck = data.length ? "to-do__list-btn to-do__list-btn-active" : "to-do__list-btn"
 
-        if(countTask > 0){
-            classCheck += " to-do__list-btn-active"
-            classArrow += " to-do__list-btn-arrow-active"
-        }
-        if(activeTask === 0){
-            classArrow += " to-do__fading"
+        if(data.every(item => item.done)){
+            classArrow += " to-do__fading" //{classArrow}
         }
 
         return (
             <div className="to-do__task-input">
-                <input 
+                <input  
                     className={classCheck}  
                     onClick={allCompleated} 
                     type="checkbox">
                 </input>
-                <img className={classArrow} src="/img/arrow.svg" alt="arrow" />
-                <form className="add" onSubmit={this.onSubmit}>                
+                <img className={classArrow} 
+                    src="/img/arrow.svg" 
+                    alt="arrow"
+                />
+                <form className="add" 
+                    onSubmit={this.onSubmit}
+                >                
                     <input className="to-do__task"
-                        value={title} 
                         type="text" 
+                        value={title} 
                         onChange={this.inputChange} 
-                        placeholder="What needs to be done?">                   
+                        placeholder="What needs to be done?"
+                    >                   
                     </input>
                 </form>
-            </div>
-            
+            </div>  
         )
     }  
 }
